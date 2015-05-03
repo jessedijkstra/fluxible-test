@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Override kill signal
+trap ctrl_c INT
+
+function ctrl_c() {
+	 pkill -P $$
+}
+
+# Execute arguments as child processes
+for arg in "$@"; do
+    $arg &
+done
+
+wait

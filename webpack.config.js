@@ -1,12 +1,14 @@
-var path = require("path");
-var webpack = require("webpack");
+var path = require('path');
+var webpack = require('webpack');
 
 module.exports = {
-  context: __dirname + "/src/js",
-  entry: "./app",
+  cache: true,
+  devtool: 'eval',
+  entry: './src/js/main.js',
   output: {
-    path: __dirname + "/dist",
-    filename: "bundle.js"
+    path: __dirname + '/dist/js',
+    filename: 'main.js',
+    publicPath: '/js/'
   },
   module: {
     loaders: [
@@ -17,12 +19,16 @@ module.exports = {
       }
     ]
   },
-  resolve: {
-      root: [path.join(__dirname, "bower_components")]
-  },
+  progress: true,
   plugins: [
-    new webpack.ResolverPlugin(
-        new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin("bower.json", ["main"])
-    )
+    new webpack.DefinePlugin({
+      'process.env': {
+        BROWSER: JSON.stringify(true),
+        NODE_ENV: JSON.stringify('development')
+      }
+    }),
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.NoErrorsPlugin()
   ]
 };

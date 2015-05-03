@@ -6,15 +6,18 @@
   "dependencies": {
     "babel-core": "^5.1.13",
     "babel-loader": "^5.0.0",
-    "webpack": "^1.8.9"
-  },
-  "devDependencies": {
-    "babel-loader": "^5.0.0",
+    "fluxible": "^0.4.6",
+    "fluxible-plugin-routr": "^0.3.0",
+    "routr": "^0.1.0",
     "webpack": "^1.8.9"
   },
   "scripts": {
-    "develop": "webpack --progress --colors --watch"
+    "dev": "NODE_ENV=development DEBUG=sdk webpack --colors --progress --watch",
+    "build": "webpack --colors --progress --production"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "debug": "^2.1.3"
+  }
 }
