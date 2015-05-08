@@ -1,5 +1,8 @@
 var path = require('path');
 var webpack = require('webpack');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var autoprefixer = require('autoprefixer-core');
+var csswring     = require('csswring');
 
 module.exports = {
   cache: true,
@@ -16,10 +19,15 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel-loader'
+      },
+      {
+          test:   /\.css$/,
+          loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader')
       }
     ]
   },
   progress: true,
+  postcss: [autoprefixer, csswring],
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
@@ -29,6 +37,9 @@ module.exports = {
     }),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.NoErrorsPlugin(),
+    new ExtractTextPlugin('../css/style.css', {
+      allChunks: true
+    })
   ]
 };

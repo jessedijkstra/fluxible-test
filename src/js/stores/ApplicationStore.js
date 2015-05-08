@@ -1,6 +1,6 @@
 import {BaseStore} from 'fluxible/addons';
 import {Map, fromJS} from 'immutable';
-import Actions from '../constants/Actions';
+import actions from '../config/actions';
 import Routr from 'routr';
 import routes from '../config/routes';
 
@@ -8,21 +8,20 @@ class ApplicationStore extends BaseStore {
   static storeName = 'ApplicationStore'
 
   static handlers = {
-    [Actions.CHANGE_ROUTE]: "changeRoute",
-    [Actions.STATUS_404]: "status404",
-    [Actions.STATUS_500]: "status500"
+    [actions.CHANGE_ROUTE]: 'changeRoute',
+    [actions.STATUS_404]: 'status404',
+    [actions.STATUS_500]: 'status500',
+    [actions.ACTIVITIES]: 'setActivities'
   }
 
-  constructor(dispatcher) {
-    super(dispatcher);
-
-    this._state = new Map();
-    this._routr = new Routr(routes);
-  }
+  state = new Map()
+  router = new Routr(routes)
 
   changeRoute({ url, state }) {
-    this.setProperty('route', fromJS(this._routr.getRoute(url)));
-    this.setProperty('state', fromJS(state));
+
+    let route = Object.assign(this.router.getRoute(url), { state });
+
+    this.setProperty('route', route);
 
     this.emitChange();
   }
@@ -35,20 +34,28 @@ class ApplicationStore extends BaseStore {
     this.changeRoute({ url: '/error' });
   }
 
+  setActivities(value) {
+    this.setProperty('activities', value);
+  }
+
   setProperty(property, value) {
-    this._state.set(property, value);
+    this.state = this.state.set(property, fromJS(value));
   }
 
   getProperty(property) {
-    this._state.get(property);
+    this.state.get(property);
   }
 
   getState() {
-    return this._state;
+    return this.state;
   }
 
-  getRoute() {
-    return this._state.get('route');
+  getModule() {
+    return this.state.getIn(['route', 'config', 'module']);
+  }
+
+  getParams() {
+    return this.state.getIn(['route', 'params']);
   }
 };
 

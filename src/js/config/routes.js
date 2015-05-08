@@ -1,27 +1,17 @@
 export default {
-    home: {
+    ActivityOverview: {
         path: '/',
         method: 'get',
-        module: 'home'
+        module: 'ActivityOverview'
     },
-    dialogue: {
-        path: '/dialogue',
-        method: 'get',
-        module: 'dialogue'
-    },
-    overlay: {
-        path: '/overlay',
-        method: 'get',
-        module: 'overlay'
-    },
-    notfound: {
+    NotFound: {
         path: '/notfound',
         method: 'get',
-        module: 'notfound'
+        module: 'NotFound'
     },
-    error: {
+    Error: {
         path: '/error',
         method: 'get',
-        module: 'maintenance'
+        module: 'Error'
     }
 };

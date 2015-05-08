@@ -1,4 +1,4 @@
-import Actions from '../constants/Actions';
+import actions from '../config/actions';
 
 const RouteActions = {
   navigate(context, { url, state, replace }) {
@@ -9,19 +9,19 @@ const RouteActions = {
       window.history.pushState(state, '', url);
     }
 
-    context.dispatch(Actions.CHANGE_ROUTE, { url, state });
+    context.dispatch(actions.CHANGE_ROUTE, { url, state });
 
     return Promise.resolve();
   },
 
   show404(context, { err }) {
-    context.dispatch(Actions.STATUS_404, { err });
+    context.dispatch(actions.STATUS_404, { err });
 
     return Promise.resolve();
   },
 
   show500(context, { err }) {
-    context.dispatch(Actions.STATUS_500, { err });
+    context.dispatch(actions.STATUS_500, { err });
 
     return Promise.resolve();
   }

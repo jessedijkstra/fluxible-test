@@ -1,23 +1,17 @@
 import React from 'react';
 import {List, Map, fromJS} from 'immutable';
-import ImmutableProperty from '../utils/ImmutableProperty';
 
-class LayeredModuleRouter extends React.Component {
+class LayeredModules extends React.Component {
   static propTypes = {
-    modules: ImmutableProperty.List,
-    layers: ImmutableProperty.List,
-    route: ImmutableProperty.Map,
+    modules: React.PropTypes.instanceOf(List),
+    layers: React.PropTypes.instanceOf(List),
+    module: React.PropTypes.string
   }
 
   static defaultProps = {
     modules: new List(),
     layers: new List(),
-    route: fromJS({
-      config: {},
-      url: '',
-      params: {},
-      navigate: undefined
-    })
+    module: null
   }
 
   state = {
@@ -29,20 +23,20 @@ class LayeredModuleRouter extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.route !== this.props.route) {
+    if (prevProps.module !== this.props.module) {
       this.updateModuleState();
     }
   }
 
   updateModuleState() {
     var module = this.props.modules.find((module) => {
-      return module.get('name') === this.props.route.get('config').get('module')
+      return module.get('name') === this.props.module
     });
 
     if (module) {
       this.setModule(module);
     } else {
-      console.warn('Unknown module');
+      this.props.onUnknownModule && this.props.onUnknownModule(this.props.module);
     }
   }
 
@@ -65,24 +59,24 @@ class LayeredModuleRouter extends React.Component {
   }
 
   renderModules() {
-    return this.state.loadedModules.toArray().map((module) => {
-      return React.addons.cloneWithProps(
-        module.get('component')(),
-        {
-          key: module.get('name'),
-          ref: module.get('layer')
-        }
-      )
+    return this.state.loadedModules.toJS().map((module) => {
+
+      let properties = Object.assign(this.props.moduleProperties.toJSON(), {
+        key: module.name,
+        ref: module.layer
+      });
+
+      return React.cloneElement(module.component(), properties);
     });
   }
 
   render() {
     return (
-      <div className="v-module-router">
+      <div className="c-layered-modules">
         {this.renderModules()}
       </div>
     );
   }
 };
 
-export default LayeredModuleRouter;
+export default LayeredModules;

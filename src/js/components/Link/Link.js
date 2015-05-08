@@ -1,5 +1,5 @@
 import React from 'react';
-import RouteActions from '../actions/RouteActions';
+import RouteActions from '../../actions/RouteActions';
 
 class Link extends React.Component {
     static contextTypes = {

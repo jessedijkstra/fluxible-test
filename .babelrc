@@ -1,3 +1,4 @@
 {
-  "optional": ["es7.classProperties", "es7.objectRestSpread"]
+  "optional": ["es7.classProperties", "es7.objectRestSpread", "runtime"],
+  "stage": 1
 }
